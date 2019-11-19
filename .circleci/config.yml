@@ -33,6 +33,26 @@ jobs:
           path: coverage
           prefix: code-coverage
           when: always
+  update-readme:
+    docker:
+      - image: circleci/node:8.9.4
+    steps:
+      - checkout
+      - run:
+          name: update-npm
+          command: 'sudo npm install -g npm@latest'
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: install-npm-deps
+          command: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: check-readme
+          command: npm run check:readme
   publish-build:
     docker:
       - image: circleci/node:8.9.4
@@ -41,6 +61,11 @@ jobs:
       - run:
           name: update-npm
           command: 'sudo npm install -g npm@latest'
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: publish-docs
+          command: npm run publish:docs
       - run:
           name: clean-up
           command: npm run prepare:package
@@ -61,6 +86,12 @@ workflows:
   check-master:
     jobs:
       - check-build:
+          filters:
+            branches:
+              only: master
+            tags:
+              ignore: /^\d+\.\d+\.\d+$/
+      - update-readme:
           filters:
             branches:
               only: master
