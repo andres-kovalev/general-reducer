@@ -1,0 +1,39 @@
+# Operations
+
+There are several built-in actions:
+
+{{#each actions}}
+* [{{fn}}]({{name}}/README.md)
+{{/each}}
+
+To use those just import `ACTIONS` object:
+
+```js
+import { ACTIONS } from 'general-reducer';
+
+// or
+
+import { createGeneralReducer } from 'general-reducer';
+
+const { ACTIONS } = createGeneralReducer(...);
+
+...
+
+dispatch(ACTIONS.set(...));
+```
+
+If by some reason you need action type constants, they are available as well:
+
+```js
+import { TYPES } from 'general-reducer';
+
+// or
+
+import { createGeneralReducer } from 'general-reducer';
+
+const { TYPES } = createGeneralReducer(...);
+
+...
+
+dispatch({ type: TYPES.set, payload: ... });
+```
