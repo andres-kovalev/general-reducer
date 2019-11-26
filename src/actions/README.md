@@ -2,6 +2,7 @@
 
 There are several built-in actions:
 
+* [all(action)](all/README.md)
 * [insert(path, value)](insert/README.md)
 * [insertAll(path, values)](insertAll/README.md)
 * [pop(path, n)](pop/README.md)

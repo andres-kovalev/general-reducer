@@ -2,6 +2,7 @@
 
 * [Introduction](README.md)
 * [Actions](src/actions/README.md)
+  * [all(action)](src/actions/all/README.md)
   * [insert(path, value)](src/actions/insert/README.md)
   * [insertAll(path, values)](src/actions/insertAll/README.md)
   * [pop(path, n)](src/actions/pop/README.md)

@@ -72,6 +72,7 @@ npm i -S general-reducer
 
 `general-reducer` exposes `ACTIONS` map object with actions for most common operations with state:
 
+* [all(action)](src/actions/all/README.md)
 * [insert(path, value)](src/actions/insert/README.md)
 * [insertAll(path, values)](src/actions/insertAll/README.md)
 * [pop(path, n)](src/actions/pop/README.md)
@@ -83,7 +84,7 @@ npm i -S general-reducer
 * [unshift(path, value)](src/actions/unshift/README.md)
 * [unshiftAll(path, values)](src/actions/unshiftAll/README.md)
 
-All actions consumes at least 1 argument - `path` to updated element, it might be an array of items or dot-separated string. When action dispatched reducer will apply corresponding operation from [immutable-state-update](https://andres-kovalev.github.io/immutable-object-update/#api) package:
+Most of actions consumes at least 1 argument - `path` to updated element, it might be an array of items or dot-separated string. When action dispatched reducer will apply corresponding operation from [immutable-state-update](https://andres-kovalev.github.io/immutable-object-update/#api) package:
 
 ```js
 import { reducer, ACTIONS } from 'general-reducer';
@@ -119,6 +120,19 @@ As a result we will receive new object with structure below:
         b2: 5
     }
 }
+```
+
+## Action combination
+
+Since `general-reducer` uses [](https://github.com/andres-kovalev/reducer-generator) under the hook, we're able to use [composite action](https://github.com/andres-kovalev/reducer-generator#combining-actions) to combine several simple actions and possibly improve performance a bit:
+
+```js
+const trim = (path, n) => ACTIONS.all(
+    ACTIONS.shift(path, n)
+    ACTIONS.pop(path, n)
+);
+
+const updated = reducer(state, trim('a.b', 2));
 ```
 
 ## Custom actions
@@ -186,5 +200,55 @@ const updated = reducer(state, ACTIONS.add('a', 5));
     a: 15
 }
 */
+```
+
+## Actions namespace
+
+By default `general-reducer` uses `'general'` as a namespace for all actins, it means two different general reducers will have the same action types:
+
+```js
+const { TYPES } = createGeneralReducer({
+    customCase: (...) => ...
+});
+
+/*
+TYPES = {
+    insert: 'general.insert',
+    insertAll: 'general.insertAll',
+    pop: 'general.pop',
+    ...
+    customCase: 'general.customCase'
+}
+*/
+```
+
+Because of that it can be problematic to combine general reducers. To generate unique action types just provide different namespace as 2nd argument of `createGeneralReducer()` function:
+
+```js
+const { TYPES } = createGeneralReducer({
+    customCase: (...) => ...
+}, 'customNamespace');
+
+/*
+TYPES = {
+    insert: 'customNamespace.insert',
+    insertAll: 'customNamespace.insertAll',
+    pop: 'customNamespace.pop',
+    ...
+    customCase: 'customNamespace.customCase'
+}
+*/
+```
+
+Definitely, in most cases to extend general reducer it's better to provide custom actions or include general reducer into custom one:
+
+```js
+function customReducer(state, action) {
+    switch (action.type) {
+        ...
+        default:
+            return generalReducer(state, action);
+    }
+}
 ```
 
