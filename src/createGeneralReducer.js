@@ -5,9 +5,9 @@ const defaultCases = require('./actions');
 
 module.exports = createGeneralReducer;
 
-function createGeneralReducer(additionalUpdates) {
+function createGeneralReducer(customUpdates, namespace = 'general') {
     const additionalCases = mapValues(
-        additionalUpdates || {},
+        customUpdates || {},
         map => (state, [ path, ...args ]) => update(
             state,
             path,
@@ -18,7 +18,7 @@ function createGeneralReducer(additionalUpdates) {
     const { TYPES, ACTIONS, reducer } = generateReducer({
         ...defaultCases,
         ...additionalCases
-    });
+    }, namespace);
 
     return {
         TYPES,
