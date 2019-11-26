@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>push(path, value) · GitBook</title>
+        <title>all(action) · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -57,10 +57,10 @@
     <link rel="shortcut icon" href="../../../gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="../pushAll/" />
+    <link rel="next" href="../insert/" />
     
     
-    <link rel="prev" href="../pop/" />
+    <link rel="prev" href="../" />
     
 
     </head>
@@ -118,9 +118,9 @@
             <ul class="articles">
                 
     
-        <li class="chapter " data-level="1.2.1" data-path="../all/">
+        <li class="chapter active" data-level="1.2.1" data-path="./">
             
-                <a href="../all/">
+                <a href="./">
             
                     
                     all(action)
@@ -170,9 +170,9 @@
             
         </li>
     
-        <li class="chapter active" data-level="1.2.5" data-path="./">
+        <li class="chapter " data-level="1.2.5" data-path="../push/">
             
-                <a href="./">
+                <a href="../push/">
             
                     
                     push(path, value)
@@ -309,7 +309,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="../../.." >push(path, value)</a>
+        <a href="../../.." >all(action)</a>
     </h1>
 </div>
 
@@ -324,34 +324,37 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <p><a name="push"></a></p>
-<h2 id="pushpath-value-&#x21D2;-object">push(path, ...value) &#x21D2; <code>object</code></h2>
-<p>Adds elements to the end of array</p>
-<p><strong>Returns</strong>: <code>object</code> - action object<br><strong>Params</strong></p>
+                                <p><a name="all"></a></p>
+<h2 id="allaction-&#x21D2;-object">all(...action) &#x21D2; <code>object</code></h2>
+<p>Combines several actions</p>
+<p><strong>Returns</strong>: <code>object</code> - combined action object<br><strong>Params</strong></p>
 <ul>
-<li>path <code>number</code> | <code>string</code> | <code>Array.&lt;(string|number)&gt;</code> - path to be updated
-(array of items or dot-separated string can be provided)</li>
-<li>...value <code>any</code> - value to be added</li>
+<li>...action <code>object</code> - action to combine</li>
 </ul>
 <p><strong>Description</strong></p>
 <pre><code class="lang-js"><span class="hljs-keyword">import</span> { ACTIONS, reducer } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;general-reducer&apos;</span>;
 
 <span class="hljs-keyword">const</span> state = {
     a: {
-        b: [ <span class="hljs-number">1</span> ]
+        a1: [ <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span>, <span class="hljs-number">10</span> ]
     }
 };
 
-<span class="hljs-keyword">const</span> updated = reducer(state, ACTIONS.push(<span class="hljs-string">&apos;a.b&apos;</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>));
+<span class="hljs-keyword">const</span> trim = (path, n) =&gt; ACTIONS.all(
+    ACTIONS.shift(path, n),
+    ACTIONS.pop(path, n)
+);
+
+<span class="hljs-keyword">const</span> updated = reducer(state, trim(<span class="hljs-string">&apos;a.a1&apos;</span>, <span class="hljs-number">2</span>));
 
 <span class="hljs-comment">// or</span>
 
-<span class="hljs-keyword">const</span> updated = reducer(state, ACTIONS.push([ <span class="hljs-string">&apos;a&apos;</span>, <span class="hljs-string">&apos;b&apos;</span> ], <span class="hljs-number">2</span>, <span class="hljs-number">3</span>));
+<span class="hljs-keyword">const</span> updated = reducer(state, trim([ <span class="hljs-string">&apos;a&apos;</span>, <span class="hljs-string">&apos;a1&apos;</span> ], <span class="hljs-number">2</span>));
 </code></pre>
 <p>As a result we will receive new object with structure below:</p>
 <pre><code class="lang-js">{
     a: {
-        b: [ <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span> ]
+        a1: [ <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span> ]
     }
 }
 </code></pre>
@@ -382,12 +385,12 @@
 
             
                 
-                <a href="../pop/" class="navigation navigation-prev " aria-label="Previous page: pop(path, n)">
+                <a href="../" class="navigation navigation-prev " aria-label="Previous page: Actions">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
                 
-                <a href="../pushAll/" class="navigation navigation-next " aria-label="Next page: pushAll(path, values)">
+                <a href="../insert/" class="navigation navigation-next " aria-label="Next page: insert(path, value)">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -398,7 +401,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"push(path, value)","level":"1.2.5","depth":2,"next":{"title":"pushAll(path, values)","level":"1.2.6","depth":2,"path":"src/actions/pushAll/README.md","ref":"src/actions/pushAll/README.md","articles":[]},"previous":{"title":"pop(path, n)","level":"1.2.4","depth":2,"path":"src/actions/pop/README.md","ref":"src/actions/pop/README.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["-sharing"],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"src/actions/push/README.md","mtime":"2019-11-26T21:40:57.260Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-11-26T21:41:47.547Z"},"basePath":"../../..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"all(action)","level":"1.2.1","depth":2,"next":{"title":"insert(path, value)","level":"1.2.2","depth":2,"path":"src/actions/insert/README.md","ref":"src/actions/insert/README.md","articles":[]},"previous":{"title":"Actions","level":"1.2","depth":1,"path":"src/actions/README.md","ref":"src/actions/README.md","articles":[{"title":"all(action)","level":"1.2.1","depth":2,"path":"src/actions/all/README.md","ref":"src/actions/all/README.md","articles":[]},{"title":"insert(path, value)","level":"1.2.2","depth":2,"path":"src/actions/insert/README.md","ref":"src/actions/insert/README.md","articles":[]},{"title":"insertAll(path, values)","level":"1.2.3","depth":2,"path":"src/actions/insertAll/README.md","ref":"src/actions/insertAll/README.md","articles":[]},{"title":"pop(path, n)","level":"1.2.4","depth":2,"path":"src/actions/pop/README.md","ref":"src/actions/pop/README.md","articles":[]},{"title":"push(path, value)","level":"1.2.5","depth":2,"path":"src/actions/push/README.md","ref":"src/actions/push/README.md","articles":[]},{"title":"pushAll(path, values)","level":"1.2.6","depth":2,"path":"src/actions/pushAll/README.md","ref":"src/actions/pushAll/README.md","articles":[]},{"title":"remove(path, n)","level":"1.2.7","depth":2,"path":"src/actions/remove/README.md","ref":"src/actions/remove/README.md","articles":[]},{"title":"set(path, value)","level":"1.2.8","depth":2,"path":"src/actions/set/README.md","ref":"src/actions/set/README.md","articles":[]},{"title":"shift(path, n)","level":"1.2.9","depth":2,"path":"src/actions/shift/README.md","ref":"src/actions/shift/README.md","articles":[]},{"title":"unshift(path, value)","level":"1.2.10","depth":2,"path":"src/actions/unshift/README.md","ref":"src/actions/unshift/README.md","articles":[]},{"title":"unshiftAll(path, values)","level":"1.2.11","depth":2,"path":"src/actions/unshiftAll/README.md","ref":"src/actions/unshiftAll/README.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["-sharing"],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"src/actions/all/README.md","mtime":"2019-11-26T21:40:57.260Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-11-26T21:41:47.547Z"},"basePath":"../../..","book":{"language":""}});
         });
     </script>
 </div>

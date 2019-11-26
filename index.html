@@ -116,7 +116,20 @@
             <ul class="articles">
                 
     
-        <li class="chapter " data-level="1.2.1" data-path="src/actions/insert/">
+        <li class="chapter " data-level="1.2.1" data-path="src/actions/all/">
+            
+                <a href="src/actions/all/">
+            
+                    
+                    all(action)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.2" data-path="src/actions/insert/">
             
                 <a href="src/actions/insert/">
             
@@ -129,7 +142,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.2" data-path="src/actions/insertAll/">
+        <li class="chapter " data-level="1.2.3" data-path="src/actions/insertAll/">
             
                 <a href="src/actions/insertAll/">
             
@@ -142,7 +155,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.3" data-path="src/actions/pop/">
+        <li class="chapter " data-level="1.2.4" data-path="src/actions/pop/">
             
                 <a href="src/actions/pop/">
             
@@ -155,7 +168,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.4" data-path="src/actions/push/">
+        <li class="chapter " data-level="1.2.5" data-path="src/actions/push/">
             
                 <a href="src/actions/push/">
             
@@ -168,7 +181,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.5" data-path="src/actions/pushAll/">
+        <li class="chapter " data-level="1.2.6" data-path="src/actions/pushAll/">
             
                 <a href="src/actions/pushAll/">
             
@@ -181,7 +194,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.6" data-path="src/actions/remove/">
+        <li class="chapter " data-level="1.2.7" data-path="src/actions/remove/">
             
                 <a href="src/actions/remove/">
             
@@ -194,7 +207,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.7" data-path="src/actions/set/">
+        <li class="chapter " data-level="1.2.8" data-path="src/actions/set/">
             
                 <a href="src/actions/set/">
             
@@ -207,7 +220,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.8" data-path="src/actions/shift/">
+        <li class="chapter " data-level="1.2.9" data-path="src/actions/shift/">
             
                 <a href="src/actions/shift/">
             
@@ -220,7 +233,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.9" data-path="src/actions/unshift/">
+        <li class="chapter " data-level="1.2.10" data-path="src/actions/unshift/">
             
                 <a href="src/actions/unshift/">
             
@@ -233,7 +246,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.10" data-path="src/actions/unshiftAll/">
+        <li class="chapter " data-level="1.2.11" data-path="src/actions/unshiftAll/">
             
                 <a href="src/actions/unshiftAll/">
             
@@ -368,6 +381,7 @@
 <h2 id="built-in-actions">Built-in actions</h2>
 <p><code>general-reducer</code> exposes <code>ACTIONS</code> map object with actions for most common operations with state:</p>
 <ul>
+<li><a href="src/actions/all/">all(action)</a></li>
 <li><a href="src/actions/insert/">insert(path, value)</a></li>
 <li><a href="src/actions/insertAll/">insertAll(path, values)</a></li>
 <li><a href="src/actions/pop/">pop(path, n)</a></li>
@@ -379,7 +393,7 @@
 <li><a href="src/actions/unshift/">unshift(path, value)</a></li>
 <li><a href="src/actions/unshiftAll/">unshiftAll(path, values)</a></li>
 </ul>
-<p>All actions consumes at least 1 argument - <code>path</code> to updated element, it might be an array of items or dot-separated string. When action dispatched reducer will apply corresponding operation from <a href="https://andres-kovalev.github.io/immutable-object-update/#api" target="_blank">immutable-state-update</a> package:</p>
+<p>Most of actions consumes at least 1 argument - <code>path</code> to updated element, it might be an array of items or dot-separated string. When action dispatched reducer will apply corresponding operation from <a href="https://andres-kovalev.github.io/immutable-object-update/#api" target="_blank">immutable-state-update</a> package:</p>
 <pre><code class="lang-js"><span class="hljs-keyword">import</span> { reducer, ACTIONS } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;general-reducer&apos;</span>;
 
 <span class="hljs-keyword">const</span> state = {
@@ -410,6 +424,15 @@
         b2: <span class="hljs-number">5</span>
     }
 }
+</code></pre>
+<h2 id="action-combination">Action combination</h2>
+<p>Since <code>general-reducer</code> uses <a href="https://github.com/andres-kovalev/reducer-generator" target="_blank"></a> under the hook, we&apos;re able to use <a href="https://github.com/andres-kovalev/reducer-generator#combining-actions" target="_blank">composite action</a> to combine several simple actions and possibly improve performance a bit:</p>
+<pre><code class="lang-js"><span class="hljs-keyword">const</span> trim = (path, n) =&gt; ACTIONS.all(
+    ACTIONS.shift(path, n)
+    ACTIONS.pop(path, n)
+);
+
+<span class="hljs-keyword">const</span> updated = reducer(state, trim(<span class="hljs-string">&apos;a.b&apos;</span>, <span class="hljs-number">2</span>));
 </code></pre>
 <h2 id="custom-actions">Custom actions</h2>
 <p>It is possible to add custom actions to perform some complex updates. To so <code>createGeneralReducer()</code> function is exposed. It consumes map object with custom action update functions. Each update function will consume part of a state as an argument and should return updated value.</p>
@@ -468,6 +491,46 @@
 }
 */</span>
 </code></pre>
+<h2 id="actions-namespace">Actions namespace</h2>
+<p>By default <code>general-reducer</code> uses <code>&apos;general&apos;</code> as a namespace for all actins, it means two different general reducers will have the same action types:</p>
+<pre><code class="lang-js"><span class="hljs-keyword">const</span> { TYPES } = createGeneralReducer({
+    customCase: (...) =&gt; ...
+});
+
+<span class="hljs-comment">/*
+TYPES = {
+    insert: &apos;general.insert&apos;,
+    insertAll: &apos;general.insertAll&apos;,
+    pop: &apos;general.pop&apos;,
+    ...
+    customCase: &apos;general.customCase&apos;
+}
+*/</span>
+</code></pre>
+<p>Because of that it can be problematic to combine general reducers. To generate unique action types just provide different namespace as 2nd argument of <code>createGeneralReducer()</code> function:</p>
+<pre><code class="lang-js"><span class="hljs-keyword">const</span> { TYPES } = createGeneralReducer({
+    customCase: (...) =&gt; ...
+}, <span class="hljs-string">&apos;customNamespace&apos;</span>);
+
+<span class="hljs-comment">/*
+TYPES = {
+    insert: &apos;customNamespace.insert&apos;,
+    insertAll: &apos;customNamespace.insertAll&apos;,
+    pop: &apos;customNamespace.pop&apos;,
+    ...
+    customCase: &apos;customNamespace.customCase&apos;
+}
+*/</span>
+</code></pre>
+<p>Definitely, in most cases to extend general reducer it&apos;s better to provide custom actions or include general reducer into custom one:</p>
+<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">customReducer</span>(<span class="hljs-params">state, action</span>) </span>{
+    <span class="hljs-keyword">switch</span> (action.type) {
+        ...
+        default:
+            <span class="hljs-keyword">return</span> generalReducer(state, action);
+    }
+}
+</code></pre>
 
                                 
                                 </section>
@@ -507,7 +570,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Introduction","level":"1.1","depth":1,"next":{"title":"Actions","level":"1.2","depth":1,"path":"src/actions/README.md","ref":"src/actions/README.md","articles":[{"title":"insert(path, value)","level":"1.2.1","depth":2,"path":"src/actions/insert/README.md","ref":"src/actions/insert/README.md","articles":[]},{"title":"insertAll(path, values)","level":"1.2.2","depth":2,"path":"src/actions/insertAll/README.md","ref":"src/actions/insertAll/README.md","articles":[]},{"title":"pop(path, n)","level":"1.2.3","depth":2,"path":"src/actions/pop/README.md","ref":"src/actions/pop/README.md","articles":[]},{"title":"push(path, value)","level":"1.2.4","depth":2,"path":"src/actions/push/README.md","ref":"src/actions/push/README.md","articles":[]},{"title":"pushAll(path, values)","level":"1.2.5","depth":2,"path":"src/actions/pushAll/README.md","ref":"src/actions/pushAll/README.md","articles":[]},{"title":"remove(path, n)","level":"1.2.6","depth":2,"path":"src/actions/remove/README.md","ref":"src/actions/remove/README.md","articles":[]},{"title":"set(path, value)","level":"1.2.7","depth":2,"path":"src/actions/set/README.md","ref":"src/actions/set/README.md","articles":[]},{"title":"shift(path, n)","level":"1.2.8","depth":2,"path":"src/actions/shift/README.md","ref":"src/actions/shift/README.md","articles":[]},{"title":"unshift(path, value)","level":"1.2.9","depth":2,"path":"src/actions/unshift/README.md","ref":"src/actions/unshift/README.md","articles":[]},{"title":"unshiftAll(path, values)","level":"1.2.10","depth":2,"path":"src/actions/unshiftAll/README.md","ref":"src/actions/unshiftAll/README.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["-sharing"],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"README.md","mtime":"2019-11-21T20:46:28.813Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-11-21T20:47:07.599Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Introduction","level":"1.1","depth":1,"next":{"title":"Actions","level":"1.2","depth":1,"path":"src/actions/README.md","ref":"src/actions/README.md","articles":[{"title":"all(action)","level":"1.2.1","depth":2,"path":"src/actions/all/README.md","ref":"src/actions/all/README.md","articles":[]},{"title":"insert(path, value)","level":"1.2.2","depth":2,"path":"src/actions/insert/README.md","ref":"src/actions/insert/README.md","articles":[]},{"title":"insertAll(path, values)","level":"1.2.3","depth":2,"path":"src/actions/insertAll/README.md","ref":"src/actions/insertAll/README.md","articles":[]},{"title":"pop(path, n)","level":"1.2.4","depth":2,"path":"src/actions/pop/README.md","ref":"src/actions/pop/README.md","articles":[]},{"title":"push(path, value)","level":"1.2.5","depth":2,"path":"src/actions/push/README.md","ref":"src/actions/push/README.md","articles":[]},{"title":"pushAll(path, values)","level":"1.2.6","depth":2,"path":"src/actions/pushAll/README.md","ref":"src/actions/pushAll/README.md","articles":[]},{"title":"remove(path, n)","level":"1.2.7","depth":2,"path":"src/actions/remove/README.md","ref":"src/actions/remove/README.md","articles":[]},{"title":"set(path, value)","level":"1.2.8","depth":2,"path":"src/actions/set/README.md","ref":"src/actions/set/README.md","articles":[]},{"title":"shift(path, n)","level":"1.2.9","depth":2,"path":"src/actions/shift/README.md","ref":"src/actions/shift/README.md","articles":[]},{"title":"unshift(path, value)","level":"1.2.10","depth":2,"path":"src/actions/unshift/README.md","ref":"src/actions/unshift/README.md","articles":[]},{"title":"unshiftAll(path, values)","level":"1.2.11","depth":2,"path":"src/actions/unshiftAll/README.md","ref":"src/actions/unshiftAll/README.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["-sharing"],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"README.md","mtime":"2019-11-26T21:40:57.256Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-11-26T21:41:47.547Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
