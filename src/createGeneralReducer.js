@@ -20,12 +20,14 @@ function createGeneralReducer(customUpdates, namespace = 'general') {
         ...additionalCases
     }, namespace);
 
+    const { all, ...rest } = ACTIONS;
+
     return {
         TYPES,
-        ACTIONS: mapValues(
-            ACTIONS,
-            action => (...args) => action(args)
-        ),
+        ACTIONS: {
+            ...mapValues(rest, compactArgs),
+            all
+        },
         reducer
     };
 }
@@ -37,4 +39,8 @@ function mapValues(object, map) {
         }),
         {}
     );
+}
+
+function compactArgs(action) {
+    return (...args) => action(args);
 }

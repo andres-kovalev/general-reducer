@@ -109,6 +109,6 @@
     },
     "dependencies": {
         "immutable-object-update": "^2.3.1",
-        "reducer-generator": "^2.0.3"
+        "reducer-generator": "^2.2.0"
     }
 }
