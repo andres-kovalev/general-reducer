@@ -226,6 +226,24 @@ describe('actions', () => {
             expect(updated.a).to.be.eql([ 1, 4, 5, 2, 3 ]);
         });
     });
+
+    describe('all', () => {
+        it('should combine several actions', () => {
+            const state = {
+                a: {
+                    a1: [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
+                }
+            };
+
+            const trim = (path, n) => ACTIONS.all(
+                ACTIONS.shift(path, n),
+                ACTIONS.pop(path, n)
+            );
+            const updated = reducer(state, trim('a.a1', 2));
+
+            expect(updated.a.a1).to.be.eql([ 3, 4, 5, 6, 7 ]);
+        });
+    });
 });
 
 describe('reducer', () => {
